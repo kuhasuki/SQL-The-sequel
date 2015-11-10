@@ -18,4 +18,5 @@ end
 
 # q = Question.find_by_id(1)
 # puts q.author
-# p QuestionFollow.followers_for_question_id(1)
+p QuestionFollow.followers_for_question_id(1)
+p QuestionFollow.followed_questions_for_user_id(1)

@@ -19,6 +19,20 @@ class QuestionFollow
     data.map{ |datum| User.new(datum) }
   end
 
+  def self.followed_questions_for_user_id(u_id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, u_id)
+      SELECT
+        questions.id, questions.title, questions.body, questions.author_id
+      FROM
+        questions
+      JOIN
+        question_follows ON questions.id = question_follows.question_id
+      WHERE
+        question_follows.user_id = ?
+    SQL
+    data.map{ |datum| Question.new(datum) }
+  end
+
   def self.find_by_id(id)
     data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
