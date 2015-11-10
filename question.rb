@@ -1,4 +1,4 @@
-require_relative 'questions_database'
+
 
 class Question
   attr_accessor :id, :title, :body, :author_id
@@ -20,16 +20,22 @@ class Question
   end
 
   def author
-    author = QuestionsDatabase.instance.execute(<<-SQL, author_id)
+    User.find_by_id(author_id)
+  end
+
+  def replies
+    Reply.find_by_question_id(id)
+  end
+
+  def self.find_by_id(id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
         *
       FROM
-        users
+        questions
       WHERE
         id = ?
     SQL
-    User.new(author.first)
+    Question.new(data.first)
   end
-
-
 end

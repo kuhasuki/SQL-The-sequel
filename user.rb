@@ -1,4 +1,4 @@
-require_relative 'questions_database'
+
 
 class User
   attr_accessor :id, :fname, :lname
@@ -30,4 +30,15 @@ class User
     SQL
     User.new(data.first)
   end
+
+  def authored_questions
+    Question.find_by_author_id(id)
+  end
+
+  def authored_replies
+    Reply.find_by_user_id(id)
+  end
 end
+
+# user = User.find_by_id(1)
+# p user.authored_replies
