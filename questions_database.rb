@@ -18,5 +18,14 @@ end
 
 # q = Question.find_by_id(1)
 # puts q.author
-p QuestionFollow.followers_for_question_id(1)
-p QuestionFollow.followed_questions_for_user_id(1)
+p us = QuestionFollow.followers_for_question_id(1)
+# p qs = QuestionFollow.followed_questions_for_user_id(2)
+p us.first
+p us.first.average_karma
+# p qs.first.followers
+#
+# p QuestionFollow.most_followed_questions(2)
+# p QuestionLike.likers_for_question_id(2)
+# p QuestionLike.num_likes_for_question_id(2)
+# p QuestionLike.liked_questions_for_user_id(1)
+# p QuestionLike.most_liked_questions(4)

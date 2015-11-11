@@ -40,6 +40,7 @@ class Reply
       WHERE
         id = ?
     SQL
+    return nil if data.empty?
     Reply.new(data.first)
   end
 

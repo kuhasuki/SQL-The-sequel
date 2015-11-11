@@ -53,19 +53,27 @@ INSERT INTO
   users(fname, lname)
 VALUES
   ('John', 'Doe'),
-  ('Paul', 'McCartney');
+  ('Paul', 'McCartney'),
+  ('Krombopulous', 'Michael'),
+  ('Jimmy', 'Dean'),
+  ('Spider', 'Man');
 
 INSERT INTO
   questions(title, body, author_id)
 VALUES
   ('Query', 'How do write SQL?', (SELECT id FROM users WHERE fname = 'Paul' AND lname = 'McCartney')),
-  ('Help', 'How do you know if been bitten by a cobra?', (SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe'));
+  ('Help', 'How do you know if been bitten by a cobra?', (SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe')),
+  ('Help Again', 'How do you treat a bear bite?', (SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe'));
 
 INSERT INTO
   question_follows(user_id, question_id)
 VALUES
   ((SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe'), (SELECT id FROM questions WHERE title = 'Query')),
-  ((SELECT id FROM users WHERE fname = 'Paul' AND lname = 'McCartney'), (SELECT id FROM questions WHERE title = 'Help'));
+  ((SELECT id FROM users WHERE fname = 'Paul' AND lname = 'McCartney'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'Krombopulous' AND lname = 'Michael'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'Jimmy' AND lname = 'Dean'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'Krombopulous' AND lname = 'Michael'), (SELECT id FROM questions WHERE title = 'Help Again')),
+  ((SELECT id FROM users WHERE fname = 'Jimmy' AND lname = 'Dean'), (SELECT id FROM questions WHERE title = 'Help Again'));
 
 INSERT INTO
   replies(question_id, reply_id, user_id, body)
@@ -77,4 +85,7 @@ INSERT INTO
   question_likes(user_id, question_id)
 VALUES
   ((SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe'), (SELECT id FROM questions WHERE title = 'Query')),
-  ((SELECT id FROM users WHERE fname = 'Paul' AND lname = 'McCartney'), (SELECT id FROM questions WHERE title = 'Help'));
+  ((SELECT id FROM users WHERE fname = 'Paul' AND lname = 'McCartney'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'Jimmy' AND lname = 'Dean'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'Spider' AND lname = 'Man'), (SELECT id FROM questions WHERE title = 'Help')),
+  ((SELECT id FROM users WHERE fname = 'John' AND lname = 'Doe'), (SELECT id FROM questions WHERE title = 'Help Again'));

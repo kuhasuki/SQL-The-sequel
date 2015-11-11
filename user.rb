@@ -7,6 +7,37 @@ class User
     @id, @fname, @lname = options.values_at('id', 'fname', 'lname')
   end
 
+  def authored_questions
+    Question.find_by_author_id(id)
+  end
+
+  def authored_replies
+    Reply.find_by_user_id(id)
+  end
+
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(id)
+  end
+
+  def liked_questions
+    QuestionLike.liked_questions_for_user_id(id)
+  end
+
+  def average_karma
+    karma = QuestionsDatabase.instance.execute(<<-SQL, id)
+      SELECT
+        (CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT(questions.id))) karma
+      FROM
+        questions
+      LEFT OUTER JOIN
+        question_likes ON question_likes.question_id = questions.id
+      WHERE
+        questions.author_id = ?
+    SQL
+    return nil if karma.nil?
+    karma.first["karma"]
+  end
+
   def self.find_by_id(id)
     data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
@@ -16,6 +47,7 @@ class User
       WHERE
         id = ?
     SQL
+    return nil if data.empty?
     User.new(data.first)
   end
 
@@ -28,15 +60,8 @@ class User
       WHERE
         fname = ? AND lname = ?
     SQL
+    return nil if data.empty?
     User.new(data.first)
-  end
-
-  def authored_questions
-    Question.find_by_author_id(id)
-  end
-
-  def authored_replies
-    Reply.find_by_user_id(id)
   end
 end
 
