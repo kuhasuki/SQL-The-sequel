@@ -6,6 +6,31 @@ class Reply
     options.values_at('id', 'question_id', 'reply_id', 'user_id', 'body')
   end
 
+  def update
+    QuestionsDatabase.instance.execute(<<-SQL, question_id, reply_id, user_id, body, id)
+      UPDATE
+        replies
+      SET
+        question_id = ?, reply_id = ?, user_id = ?, body = ?
+      WHERE
+        id = ?
+    SQL
+  end
+
+  def save
+    if id
+      update
+    else
+      QuestionsDatabase.instance.execute(<<-SQL, question_id, reply_id, user_id, body)
+        INSERT INTO
+          replies(question_id, reply_id, user_id, body)
+        VALUES
+          (?, ?, ?, ?)
+      SQL
+      self.id = QuestionsDatabase.instance.last_insert_row_id
+    end
+  end
+
   def author
     User.find_by_id(user_id)
   end

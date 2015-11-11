@@ -1,10 +1,33 @@
-
-
 class User
   attr_accessor :id, :fname, :lname
 
   def initialize(options)
     @id, @fname, @lname = options.values_at('id', 'fname', 'lname')
+  end
+
+  def update
+    QuestionsDatabase.instance.execute(<<-SQL, fname, lname, id)
+      UPDATE
+        users
+      SET
+        fname = ?, lname = ?
+      WHERE
+        id = ?
+    SQL
+  end
+
+  def save
+    if id
+      update
+    else
+      QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
+        INSERT INTO
+          users(fname, lname)
+        VALUES
+          (?, ?)
+      SQL
+      self.id = QuestionsDatabase.instance.last_insert_row_id
+    end
   end
 
   def authored_questions

@@ -29,3 +29,8 @@ p us.first.average_karma
 # p QuestionLike.num_likes_for_question_id(2)
 # p QuestionLike.liked_questions_for_user_id(1)
 # p QuestionLike.most_liked_questions(4)
+# j = User.new({"fname" => "michael", "lname" => "jordan"})
+# j.fname = "David"
+# j.lname = "Copperfield"
+# j.save
+p User.find_by_id(13)
